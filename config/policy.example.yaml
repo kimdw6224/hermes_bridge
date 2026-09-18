@@ -1,0 +1,51 @@
+# 새 설치의 기본 신뢰 수준입니다. 신뢰 모드는 운영자 검토 뒤에만 변경합니다.
+mode: "untrusted"
+
+audit:
+  enabled: true
+  store_raw_stdout: false
+  store_screenshots: false
+  redact_secrets: true
+
+approval:
+  method: "elicitation_then_local"
+  timeout_seconds: 300
+  required_for:
+    - "privileged_reboot"
+    - "privileged_shutdown"
+    - "security_control_change"
+    - "firewall_global_change"
+    - "account_or_credential_change"
+    - "bulk_delete"
+  bulk_delete_threshold: 100
+
+hard_deny:
+  - "credential_store_export"
+  - "windows_logon_bypass"
+  - "uac_secure_desktop_automation"
+  - "arbitrary_system_shell"
+  - "raw_disk_device_access"
+
+shell:
+  user_level_only: true
+  inspect_commands_for_accident_prevention: true
+  max_sync_seconds: 110
+  max_output_bytes: 200000
+
+filesystem:
+  # 운영자가 승인한 작업 폴더만 추가합니다. 기본 데이터 폴더는 항상 포함됩니다.
+  additional_allowed_roots: []
+  resolve_reparse_points: true
+  deny_device_paths: true
+  allow_unc: false
+  allow_alternate_data_streams: false
+  max_inline_read_bytes: 1000000
+  max_inline_write_bytes: 1000000
+
+computer:
+  serialize_input: true
+  emergency_stop_requires_local_reset: true
+
+idempotency:
+  enabled: true
+  ttl_minutes: 30

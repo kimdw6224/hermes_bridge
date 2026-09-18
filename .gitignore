@@ -1,0 +1,29 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.basedpyright/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.env
+.env.*
+!.env.example
+
+
+# Local environments, execution evidence, and machine-specific records
+.venv-*/
+.omo/
+/NVIDIA Corporation/
+/.debug-journal.md
+/.triggered.json
+/HANDOFF.md
+/IMPLEMENTATION_STATUS.md
+
+# .NET build outputs
+**/bin/
+**/obj/
+/service-host/publish-check/

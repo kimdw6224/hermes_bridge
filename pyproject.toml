@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling==1.32.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hermes-windows-bridge"
+version = "0.1.0"
+description = "Security-oriented Windows MCP bridge for Hermes"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "mcp==2.1.1",
+    "mss==10.2.0",
+    "pillow==12.3.0",
+    "playwright==1.62.0",
+    "psutil==7.2.2",
+    "pydantic==2.13.5",
+    "pywin32==312; sys_platform == 'win32'",
+    "pywinauto==0.6.9; sys_platform == 'win32'",
+    "pyyaml==6.0.3",
+]
+
+[project.scripts]
+hermes-windows-bridge = "hermes_windows_bridge.__main__:main"
+
+[dependency-groups]
+dev = [
+    "basedpyright==1.39.10",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "ruff==0.16.6",
+]
+
+[tool.uv]
+link-mode = "copy"
+required-version = ">=0.12.8"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hermes_windows_bridge"]
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-config", "--strict-markers"]
+filterwarnings = ["error"]
+markers = [
+    "integration: Windows 구성 요소 간 통합 테스트",
+    "security: 보안 불변식 회귀 테스트",
+    "smoke: 실제 실행 표면의 스모크 테스트",
+]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.basedpyright]
+typeCheckingMode = "all"
+pythonVersion = "3.14"
+pythonPlatform = "Windows"
+include = ["src", "tests"]
+exclude = ["**/__pycache__", "**/.venv", "**/build", "**/dist"]
+reportUnusedCallResult = "warning"
+reportUnnecessaryTypeIgnoreComment = "error"
+reportUnusedVariable = "error"
+reportMissingParameterType = "error"
+reportPrivateUsage = "error"
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["COM812", "CPY001", "D203", "D213", "ISC001"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ARG", "D", "PLR2004", "S101", "S603", "SLF001"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true

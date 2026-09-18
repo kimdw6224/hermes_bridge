@@ -1,0 +1,63 @@
+server:
+  host: "127.0.0.1"
+  port: 8765
+  mcp_path: "/mcp"
+  allowed_hosts:
+    - "127.0.0.1"
+    - "localhost"
+    - "main-pc.<tailnet>.ts.net"
+  allowed_origins:
+    - "https://main-pc.<tailnet>.ts.net"
+
+ipc:
+  worker_pipe: "\\\\.\\pipe\\HermesWindowsBridgeWorker"
+  privileged_pipe: "\\\\.\\pipe\\HermesWindowsBridgePrivileged"
+  protocol_version: 1
+  heartbeat_seconds: 5
+  offline_after_seconds: 15
+
+tailscale:
+  require_app_capability: true
+  app_capability: "hermes.local/windows-control"
+
+paths:
+  program_data: "%ProgramData%\\HermesWindowsBridge"
+  user_data: "%LOCALAPPDATA%\\HermesWindowsBridge"
+
+browser:
+  enabled: true
+  profile_dir: "%LOCALAPPDATA%\\HermesWindowsBridge\\browser-profile"
+  headless: false
+
+codex:
+  enabled: true
+  executable: "codex"
+  record_git_preflight: true
+
+computer:
+  enabled: true
+  serialize_input: true
+  emergency_stop_hotkey: "ctrl+alt+shift+f11"
+  emergency_stop_persistent: true
+
+jobs:
+  max_concurrent: 4
+  retention_hours: 24
+  use_windows_job_objects: true
+
+# Bridge request replay 방지 저장소의 전역 보존 설정입니다.
+# policy.example.yaml의 idempotency는 dispatch 허용 정책이며 별도 계층입니다.
+idempotency:
+  enabled: true
+  ttl_minutes: 30
+
+output:
+  max_output_bytes: 200000
+  max_inline_read_bytes: 1000000
+  max_inline_write_bytes: 1000000
+
+logging:
+  level: "INFO"
+  retain_raw_command_output: false
+  retain_screenshots: false
+# 실제 token이나 secret을 이 파일에 기록하지 마십시오.
